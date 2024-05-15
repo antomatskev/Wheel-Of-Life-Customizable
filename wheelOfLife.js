@@ -1,106 +1,83 @@
-/**
- * The MIT License (MIT)
- * Copyright (c) 2023 Matthias Kappeller
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-
-const defaultConfig = [
+const defaultCats = [
     {
         name: "Friendship",
         color: "#001699",
-        description: "",
+        value: 10,
     },
     {
         name: "Family",
         color: "#3448d8",
-        description: "",
+        value: 10,
     },
     {
         name: "Inner circle",
         color: "#7a88f8",
-        description: "",
+        value: 10,
     },
     {
         name: "Personal life",
         color: "#001dff",
-        description: "",
+        value: 10,
     },
     {
         name: "Career",
         color: "#43ff00",
-        description: "",
+        value: 10,
     },
     {
         name: "Finance",
         color: "#1e6101",
-        description: "",
+        value: 10,
     },
     {
         name: "Learning",
         color: "#7aa66d",
-        description: "",
+        value: 10,
     },
     {
         name: "Hobby",
         color: "#4ab823",
-        description: "",
+        value: 10,
     },
     {
         name: "Leisure",
         color: "#ffeb00",
-        description: "",
+        value: 10,
     },
     {
         name: "Travelling",
         color: "#817400",
-        description: "",
+        value: 10,
     },
     {
         name: "Free time",
         color: "#eae068",
-        description: "",
+        value: 10,
     },
     {
         name: "Image",
         color: "#ffae00",
-        description: "",
+        value: 10,
     },
     {
         name: "Health",
         color: "#ff4400",
-        description: "",
+        value: 10,
     },
     {
         name: "Mental health",
         color: "#7c2700",
-        description: "",
+        value: 10,
     },
     {
         name: "Self-development",
         color: "#ff936b",
-        description: "",
+        value: 10,
     },
     {
         name: "Home",
         color: "#d35a2c",
-        description: "",
+        value: 10,
     },
 ];
 
@@ -109,17 +86,12 @@ const defaultConfig = [
         ? (module.exports = e())
         : "function" == typeof define && define.amd
             ? define(e)
-            : ((t =
-                "undefined" != typeof globalThis ? globalThis : t || self).WheelOfLife =
-                e());
+            : ((t = "undefined" != typeof globalThis ? globalThis : t || self).WheelOfLife = e());
 })(this, function () {
     "use strict";
     return {
-        setup: function (chartEl, sectionsEl, config) {
-            const chartSeries = Array(config.length).fill(10);
-            const chartLabels = config.map((c) => c.name);
-            const chartColors = config.map((c) => c.color);
-
+        setup: function (chartEl, sectionsEl, cats) {
+            // Initialize options with empty series
             var options = {
                 chart: {
                     type: "polarArea",
@@ -132,65 +104,99 @@ const defaultConfig = [
                         },
                     },
                 },
-                series: chartSeries,
-                labels: chartLabels,
-                colors: chartColors,
+                series: [], // Initialize series with empty array
+                labels: [],
                 yaxis: {
                     max: 10,
                 },
-                xaxis: {
-                    labels: {
-                        style: {
-                            colors: chartColors,
-                        },
-                    },
-                },
                 dataLabels: {
                     enabled: true,
-                    formatter: (_, opt) => config[opt.seriesIndex].name,
+                    formatter: (_, opt) => cats[opt.seriesIndex].name,
                 },
                 legend: {show: false},
-                plotOptions: {
-                    radar: {
-                        polygons: {
-                            connectorColors: chartColors,
-                            colors: chartColors,
-                        },
-                    },
-                },
             };
+
             var chart = new ApexCharts(chartEl, options);
             chart.render();
 
-            for (let i = 0; i < config.length; i++) {
-                const c = config[i];
+            // Function to update chart and sections
+            function updateChartAndSections(config) {
+                // Update series with values from config
+                const chartSeries = config.map((c) => c.value);
+                const chartLabels = config.map((c) => c.name);
+                const chartColors = config.map((c) => c.color);
 
-                const section = document.createElement("section");
-                // Header
-                const header = document.createElement("h1");
-                header.textContent = c.name;
-                section.appendChild(header);
-                // Input
-                const input = document.createElement("input");
-                input.id = `input-${i}`;
-                input.type = "range";
-                input.min = "1";
-                input.max = "10";
-                input.step = "1";
-                input.value = "10";
-                input.oninput = (e) => {
-                    chartSeries[i] = e.target.value;
-                    chart.updateSeries(chartSeries, false);
-                };
-                section.append(input);
-                // Description
-                const description = document.createElement("p");
-                description.innerText = c.description;
-                section.appendChild(description);
+                options.series = chartSeries;
+                options.labels = chartLabels;
+                options.colors = chartColors;
 
-                // Add section
-                sectionsEl.appendChild(section);
+                chart.updateOptions(options);
+
+                // Clear sections
+                sectionsEl.innerHTML = "";
+
+                // Create sections for each configuration
+                config.forEach((c, i) => {
+                    const section = document.createElement("section");
+                    // Header
+                    const header = document.createElement("h1");
+                    header.textContent = c.name;
+                    section.appendChild(header);
+                    // Input
+                    const input = document.createElement("input");
+                    input.id = `input-${i}`;
+                    input.type = "range";
+                    input.min = "1";
+                    input.max = "10";
+                    input.step = "1";
+                    input.value = c.value;
+                    input.oninput = (e) => {
+                        config[i].value = parseInt(e.target.value);
+                        updateChartAndSections(config);
+                    };
+                    section.append(input);
+
+                    // Add section
+                    sectionsEl.appendChild(section);
+                });
             }
+
+            // Initially render default configurations
+            updateChartAndSections(cats);
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('addCatForm');
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    const name = document.getElementById('name').value;
+                    const color = document.getElementById('colorPicker').value;
+                    const value = 10
+
+                    const newElement = {name, color, value};
+                    cats.push(newElement);
+
+                    // Optionally, you can reset the form fields after submission
+                    form.reset();
+                    updateChartAndSections(cats);
+
+                    console.log('New category added:', newElement);
+                    console.log('Updated cats:', cats);
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('removeAllCatsForm');
+                form.addEventListener('submit', function (event) {
+                    if (window.confirm("Are you sure you want to remove all categories?")) {
+                        event.preventDefault();
+                        cats.length = 0;
+                        updateChartAndSections(cats);
+                        console.log('All categories removed');
+                        console.log('Updated cats:', cats);
+                    }
+                });
+            });
         },
     };
 });

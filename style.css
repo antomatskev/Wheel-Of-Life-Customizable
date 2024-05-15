@@ -1,40 +1,89 @@
 body {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 footer {
-  position: fixed;
-  margin: 10px;
-  bottom: 0;
-  right: 0;
+    position: fixed;
+    margin: 10px;
+    bottom: 0;
+    right: 0;
 }
 
 #container {
-  width: 80%;
+    width: 80%;
 }
 
 #categories {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 15px;
+}
+
+#addCatForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: auto;
+    align-items: center;
+    border: 1px solid gray;
+    width: 40%;
+}
+
+#removeAllCatsForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 40%;
+    margin: 10px auto;
 }
 
 #final {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid gray;
 }
 
 p {
-  text-align: justify;
-  max-width: var(--input-width);
+    text-align: justify;
+    max-width: var(--input-width);
 }
 
 #chart {
-  max-width: 450px;
-  margin: auto;
+    max-width: 450px;
+    margin: auto;
+}
+
+input[type="submit"], button[type="submit"] {
+    border: none; /* Remove border */
+    color: white; /* White text color */
+    padding: 10px 20px; /* Add padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Display as inline block */
+    font-size: 16px; /* Increase font size */
+    margin: 4px 2px; /* Add some margin */
+    transition-duration: 0.4s; /* Add animation duration */
+    cursor: pointer; /* Add cursor style */
+    border-radius: 4px; /* Add border radius */
+}
+
+#addCat {
+    background-color: #4c6faf;
+}
+
+#removeCats {
+    background-color: #6a1010;
+}
+
+input[type="submit"]:hover, button[type="submit"]:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+input[type="color"] {
+    color: #af0ed1;
 }
