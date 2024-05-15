@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,93 +20,177 @@
  * THE SOFTWARE.
  */
 
-!(function (t, e) {
-  "object" == typeof exports && "undefined" != typeof module
-    ? (module.exports = e())
-    : "function" == typeof define && define.amd
-    ? define(e)
-    : ((t =
-        "undefined" != typeof globalThis ? globalThis : t || self).WheelOfLife =
-        e());
-})(this, function () {
-  "use strict";
-  return {
-    setup: function (chartEl, sectionsEl, config) {
-      const chartSeries = Array(config.length).fill(10);
-      const chartLabels = config.map((c) => c.name);
-      const chartColors = config.map((c) => c.color);
 
-      var options = {
-        chart: {
-          type: "polarArea",
-          toolbar: {
-            show: true,
-          },
-          animations: {
-            animateGradually: {
-              enabled: false,
-            },
-          },
-        },
-        series: chartSeries,
-        labels: chartLabels,
-        colors: chartColors,
-        yaxis: {
-          max: 10,
-        },
-        xaxis: {
-          labels: {
-            style: {
-              colors: chartColors,
-            },
-          },
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: (_, opt) => config[opt.seriesIndex].name,
-        },
-        legend: { show: false },
-        plotOptions: {
-          radar: {
-            polygons: {
-              connectorColors: chartColors,
-              colors: chartColors,
-            },
-          },
-        },
-      };
-      var chart = new ApexCharts(chartEl, options);
-      chart.render();
-
-      for (let i = 0; i < config.length; i++) {
-        const c = config[i];
-
-        const section = document.createElement("section");
-        // Header
-        const header = document.createElement("h1");
-        header.textContent = c.name;
-        section.appendChild(header);
-        // Input
-        const input = document.createElement("input");
-        input.id = `input-${i}`;
-        input.type = "range";
-        input.min = "1";
-        input.max = "10";
-        input.step = "1";
-        input.value = "10";
-        input.oninput = (e) => {
-          chartSeries[i] = e.target.value;
-          chart.updateSeries(chartSeries, false);
-        };
-        section.append(input);
-        // Description
-        const description = document.createElement("p");
-        description.innerText = c.description;
-        section.appendChild(description);
-
-        // Add section
-        sectionsEl.appendChild(section);
-      }
+const defaultConfig = [
+    {
+        name: "Friendship",
+        color: "#001699",
+        description: "",
     },
-  };
+    {
+        name: "Family",
+        color: "#3448d8",
+        description: "",
+    },
+    {
+        name: "Inner circle",
+        color: "#7a88f8",
+        description: "",
+    },
+    {
+        name: "Personal life",
+        color: "#001dff",
+        description: "",
+    },
+    {
+        name: "Career",
+        color: "#43ff00",
+        description: "",
+    },
+    {
+        name: "Finance",
+        color: "#1e6101",
+        description: "",
+    },
+    {
+        name: "Learning",
+        color: "#7aa66d",
+        description: "",
+    },
+    {
+        name: "Hobby",
+        color: "#4ab823",
+        description: "",
+    },
+    {
+        name: "Leisure",
+        color: "#ffeb00",
+        description: "",
+    },
+    {
+        name: "Travelling",
+        color: "#817400",
+        description: "",
+    },
+    {
+        name: "Free time",
+        color: "#eae068",
+        description: "",
+    },
+    {
+        name: "Image",
+        color: "#ffae00",
+        description: "",
+    },
+    {
+        name: "Health",
+        color: "#ff4400",
+        description: "",
+    },
+    {
+        name: "Mental health",
+        color: "#7c2700",
+        description: "",
+    },
+    {
+        name: "Self-development",
+        color: "#ff936b",
+        description: "",
+    },
+    {
+        name: "Home",
+        color: "#d35a2c",
+        description: "",
+    },
+];
+
+!(function (t, e) {
+    "object" == typeof exports && "undefined" != typeof module
+        ? (module.exports = e())
+        : "function" == typeof define && define.amd
+            ? define(e)
+            : ((t =
+                "undefined" != typeof globalThis ? globalThis : t || self).WheelOfLife =
+                e());
+})(this, function () {
+    "use strict";
+    return {
+        setup: function (chartEl, sectionsEl, config) {
+            const chartSeries = Array(config.length).fill(10);
+            const chartLabels = config.map((c) => c.name);
+            const chartColors = config.map((c) => c.color);
+
+            var options = {
+                chart: {
+                    type: "polarArea",
+                    toolbar: {
+                        show: true,
+                    },
+                    animations: {
+                        animateGradually: {
+                            enabled: false,
+                        },
+                    },
+                },
+                series: chartSeries,
+                labels: chartLabels,
+                colors: chartColors,
+                yaxis: {
+                    max: 10,
+                },
+                xaxis: {
+                    labels: {
+                        style: {
+                            colors: chartColors,
+                        },
+                    },
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: (_, opt) => config[opt.seriesIndex].name,
+                },
+                legend: {show: false},
+                plotOptions: {
+                    radar: {
+                        polygons: {
+                            connectorColors: chartColors,
+                            colors: chartColors,
+                        },
+                    },
+                },
+            };
+            var chart = new ApexCharts(chartEl, options);
+            chart.render();
+
+            for (let i = 0; i < config.length; i++) {
+                const c = config[i];
+
+                const section = document.createElement("section");
+                // Header
+                const header = document.createElement("h1");
+                header.textContent = c.name;
+                section.appendChild(header);
+                // Input
+                const input = document.createElement("input");
+                input.id = `input-${i}`;
+                input.type = "range";
+                input.min = "1";
+                input.max = "10";
+                input.step = "1";
+                input.value = "10";
+                input.oninput = (e) => {
+                    chartSeries[i] = e.target.value;
+                    chart.updateSeries(chartSeries, false);
+                };
+                section.append(input);
+                // Description
+                const description = document.createElement("p");
+                description.innerText = c.description;
+                section.appendChild(description);
+
+                // Add section
+                sectionsEl.appendChild(section);
+            }
+        },
+    };
 });
